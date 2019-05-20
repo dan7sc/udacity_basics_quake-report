@@ -35,7 +35,7 @@ class Earthquake
     private var mLocation: String = location
 
     /** Date of the earthquake  */
-    private var mDate: String = date
+    private var mDate: String? = date
 
     /**
      * Returns the magnitude of the earthquake.

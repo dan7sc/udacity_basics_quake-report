@@ -17,7 +17,6 @@ package com.example.android.quakereport
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.ArrayAdapter
 import android.view.View
 import android.widget.ListView
 
@@ -29,29 +28,23 @@ class EarthquakeActivity : AppCompatActivity() {
         setContentView(R.layout.earthquake_activity)
 
         // Create a fake list of earthquake locations.
-        val earthquakes = ArrayList<String>()
-        earthquakes.add("San Francisco")
-        earthquakes.add("London")
-        earthquakes.add("Tokyo")
-        earthquakes.add("Mexico City")
-        earthquakes.add("Moscow")
-        earthquakes.add("Rio de Janeiro")
-        earthquakes.add("Paris")
+        val earthquakes = ArrayList<Earthquake>()
+        earthquakes.add(Earthquake("7.2", "San Francisco", "Jan 21, 2016"))
+        earthquakes.add(Earthquake("6.1", "London", "Feb 2, 2015"))
+        earthquakes.add(Earthquake("3.9", "Tokyo", "July 20, 2014"))
+        earthquakes.add(Earthquake("5.4", "Mexico City", "Nov 10, 2013"))
+        earthquakes.add(Earthquake("2.8", "Moscow", "May 3, 2013"))
+        earthquakes.add(Earthquake("4.9", "Rio de Janeiro", "Aug 19, 2012"))
+        earthquakes.add(Earthquake("1.6", "Paris", "Oct 10, 2011"))
 
         // Find a reference to the {@link ListView} in the layout
-        val earthquakeListView = findViewById<View>(R.id.list) as ListView
+        val earthquakeListView: ListView = findViewById<View>(R.id.list) as ListView
 
-        // Create a new {@link ArrayAdapter} of earthquakes
-        val adapter = ArrayAdapter(
-                this, android.R.layout.simple_list_item_1, earthquakes)
+        // Create a new adapter that takes the list of earthquakes as input
+        val adapter = EarthquakeAdapter(this, earthquakes)
 
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.adapter = adapter
-    }
-
-    companion object {
-
-        val LOG_TAG = EarthquakeActivity::class.java!!.getName()
     }
 }

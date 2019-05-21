@@ -28,6 +28,7 @@ import java.util.Locale
 import java.text.SimpleDateFormat
 
 
+
 /**
  * An [EarthquakeAdapter] knows how to create a list item layout for each earthquake
  * in the data source (a list of [Earthquake] objects).
@@ -43,6 +44,12 @@ class EarthquakeAdapter
  * @param earthquakes is the list of earthquakes, which is the data source of the adapter
  */
 (context: Context, earthquakes: ArrayList<Earthquake>) : ArrayAdapter<Earthquake>(context, 0, earthquakes) {
+
+    /**
+     * The part of the location string from the USGS service that we use to determine
+     * whether or not there is a location offset present ("5km N of Cairo, Egypt").
+     */
+    private val LOCATION_SEPARATOR: String = " of "
 
     /**
      * Returns a list item view that displays information about the earthquake at the given position
@@ -65,11 +72,44 @@ class EarthquakeAdapter
         // Display the magnitude of the current earthquake in that TextView
         magnitudeView.text = currentEarthquake!!.getMagnitude()
 
-        // Find the TextView with view ID location
-        val locationView: TextView = listItemView.findViewById<View>(R.id.location) as TextView
-        // Display the location of the current earthquake in that TextView
-        locationView.text = currentEarthquake.getLocation()
+        // Get the original location string from the Earthquake object,
+        // which can be in the format of "5km N of Cairo, Egypt" or "Pacific-Antarctic Ridge".
+        val originalLocation: String? = currentEarthquake.getLocation()
 
+        // If the original location string (i.e. "5km N of Cairo, Egypt") contains
+        // a primary location (Cairo, Egypt) and a location offset (5km N of that city)
+        // then store the primary location separately from the location offset in 2 Strings,
+        // so they can be displayed in 2 TextViews.
+        val primaryLocation: String?
+        val locationOffset: String?
+
+        // Check whether the originalLocation string contains the " of " text
+        if (originalLocation!!.contains(this.LOCATION_SEPARATOR)) {
+            // Split the string into different parts (as an array of Strings)
+            // based on the " of " text. We expect an array of 2 Strings, where
+            // the first String will be "5km N" and the second String will be "Cairo, Egypt".
+            val parts: List<String> = originalLocation.split(this.LOCATION_SEPARATOR)
+            // Location offset should be "5km N " + " of " --> "5km N of"
+            locationOffset = parts[0] + this.LOCATION_SEPARATOR
+            // Primary location should be "Cairo, Egypt"
+            primaryLocation = parts[1]
+        } else {
+            // Otherwise, there is no " of " text in the originalLocation string.
+            // Hence, set the default location offset to say "Near the".
+            locationOffset = context.getString(R.string.near_the)
+            // The primary location will be the full location string "Pacific-Antarctic Ridge".
+            primaryLocation = originalLocation
+        }
+
+        // Find the TextView with view ID location
+        val primaryLocationView: TextView = listItemView.findViewById<View>(R.id.primary_location) as TextView
+        // Display the location of the current earthquake in that TextView
+        primaryLocationView.text = primaryLocation
+
+        // Find the TextView with view ID location offset
+        val locationOffsetView: TextView = listItemView.findViewById<View>(R.id.location_offset) as TextView
+        // Display the location offset of the current earthquake in that TextView
+        locationOffsetView.text = locationOffset
 
         // Create a new Date object from the time in milliseconds of the earthquake
         val dateObject = Date(currentEarthquake.getTimeInMilliseconds())
@@ -91,20 +131,21 @@ class EarthquakeAdapter
         // Return the list item view that is now showing the appropriate data
         return listItemView
     }
+
+    /**
+     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+     */
+    private fun formatDate(dateObject: Date): String {
+        val dateFormat = SimpleDateFormat("LLL dd, yyyy", Locale.US)
+        return dateFormat.format(dateObject)
+    }
+
+    /**
+     * Return the formatted date string (i.e. "4:30 PM") from a Date object.
+     */
+    private fun formatTime(dateObject: Date): String {
+        val timeFormat = SimpleDateFormat("h:mm a", Locale.US)
+        return timeFormat.format(dateObject)
+    }
 }
 
-/**
- * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
- */
-private fun formatDate(dateObject: Date): String {
-    val dateFormat = SimpleDateFormat("LLL dd, yyyy", Locale.US)
-    return dateFormat.format(dateObject)
-}
-
-/**
- * Return the formatted date string (i.e. "4:30 PM") from a Date object.
- */
-private fun formatTime(dateObject: Date): String {
-    val timeFormat = SimpleDateFormat("h:mm a", Locale.US)
-    return timeFormat.format(dateObject)
-}

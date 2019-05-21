@@ -22,6 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.graphics.drawable.GradientDrawable
+import android.support.v4.content.ContextCompat
 
 import java.util.Date
 import java.util.Locale
@@ -58,19 +60,14 @@ class EarthquakeAdapter
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // Check if there is an existing list item view (called convertView) that we can reuse,
         // otherwise, if convertView is null, then inflate a new list item layout.
-        var listItemView = convertView
+        var listItemView: View? = convertView
         if (listItemView == null) {
             listItemView = LayoutInflater.from(context).inflate(
                     R.layout.earthquake_list_item, parent, false)
         }
 
         // Find the earthquake at the given position in the list of earthquakes
-        val currentEarthquake = getItem(position)
-
-//        // Find the TextView with view ID magnitude
-//        val magnitudeView: TextView = listItemView!!.findViewById<View>(R.id.magnitude) as TextView
-//        // Display the magnitude of the current earthquake in that TextView
-//        magnitudeView.text = currentEarthquake!!.getMagnitude().toString()
+        val currentEarthquake: Earthquake? = getItem(position)
 
         // Find the TextView with view ID magnitude
         val magnitudeView: TextView = listItemView!!.findViewById<View>(R.id.magnitude) as TextView
@@ -78,6 +75,16 @@ class EarthquakeAdapter
         val formattedMagnitude: String = formatMagnitude(currentEarthquake!!.getMagnitude())
         // Display the magnitude of the current earthquake in that TextView
         magnitudeView.text = formattedMagnitude
+
+        // Set the proper background color on the magnitude circle.
+        // Fetch the background from the TextView, which is a GradientDrawable.
+        val magnitudeCircle: GradientDrawable = magnitudeView.background as GradientDrawable
+
+        // Get the appropriate background color based on the current earthquake magnitude
+        val magnitudeColor: Int = getMagnitudeColor(currentEarthquake.getMagnitude())
+
+        // Set the color on the magnitude circle
+        magnitudeCircle.setColor(magnitudeColor)
 
         // Get the original location string from the Earthquake object,
         // which can be in the format of "5km N of Cairo, Egypt" or "Pacific-Antarctic Ridge".
@@ -124,14 +131,14 @@ class EarthquakeAdapter
         // Find the TextView with view ID date
         val dateView: TextView = listItemView.findViewById<View>(R.id.date) as TextView
         // Format the date string (i.e. "Mar 3, 1984")
-        val formattedDate = formatDate(dateObject)
+        val formattedDate: String = formatDate(dateObject)
         // Display the date of the current earthquake in that TextView
         dateView.text = formattedDate
 
         // Find the TextView with view ID time
-        val timeView = listItemView.findViewById(R.id.time) as TextView
+        val timeView: TextView = listItemView.findViewById(R.id.time) as TextView
         // Format the time string (i.e. "4:30PM")
-        val formattedTime = formatTime(dateObject)
+        val formattedTime: String = formatTime(dateObject)
         // Display the time of the current earthquake in that TextView
         timeView.text = formattedTime
 
@@ -162,6 +169,24 @@ class EarthquakeAdapter
     private fun formatMagnitude(magnitude: Double): String {
         val magnitudeFormat = DecimalFormat("0.0")
         return magnitudeFormat.format(magnitude)
+    }
+
+    private fun getMagnitudeColor(magnitude: Double): Int {
+        val magnitudeColorResourceId: Int
+        val magnitudeFloor: Int = Math.floor(magnitude).toInt()
+        when (magnitudeFloor) {
+            0, 1 -> magnitudeColorResourceId = R.color.magnitude1
+            2 -> magnitudeColorResourceId = R.color.magnitude2
+            3 -> magnitudeColorResourceId = R.color.magnitude3
+            4 -> magnitudeColorResourceId = R.color.magnitude4
+            5 -> magnitudeColorResourceId = R.color.magnitude5
+            6 -> magnitudeColorResourceId = R.color.magnitude6
+            7 -> magnitudeColorResourceId = R.color.magnitude7
+            8 -> magnitudeColorResourceId = R.color.magnitude8
+            9 -> magnitudeColorResourceId = R.color.magnitude9
+            else -> magnitudeColorResourceId = R.color.magnitude10plus
+        }
+        return ContextCompat.getColor(context, magnitudeColorResourceId)
     }
 }
 

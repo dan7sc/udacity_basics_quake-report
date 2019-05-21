@@ -24,9 +24,10 @@ class Earthquake
  *
  * @param magnitude is the magnitude (size) of the earthquake
  * @param location is the city location of the earthquake
- * @param date is the date the earthquake happened
+ * @param timeInMilliseconds is the time in milliseconds (from the Epoch) when the
+ *  earthquake happened
  */
-(magnitude: String, location: String, date: String) {
+(magnitude: String, location: String, timeInMilliseconds: Long) {
 
     /** Magnitude of the earthquake  */
     private var mMagnitude: String = magnitude
@@ -35,7 +36,7 @@ class Earthquake
     private var mLocation: String = location
 
     /** Date of the earthquake  */
-    private var mDate: String? = date
+    private var mTimeInMilliseconds: Long = timeInMilliseconds
 
     /**
      * Returns the magnitude of the earthquake.
@@ -52,9 +53,9 @@ class Earthquake
     }
 
     /**
-     * Returns the date of the earthquake.
+     * Returns the time of the earthquake.
      */
-    fun getDate(): String? {
-        return mDate
+    fun getTimeInMilliseconds(): Long {
+        return mTimeInMilliseconds
     }
 }

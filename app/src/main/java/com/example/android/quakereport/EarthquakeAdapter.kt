@@ -23,6 +23,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
+import java.util.Date
+import java.util.Locale
+import java.text.SimpleDateFormat
+
 
 /**
  * An [EarthquakeAdapter] knows how to create a list item layout for each earthquake
@@ -66,12 +70,41 @@ class EarthquakeAdapter
         // Display the location of the current earthquake in that TextView
         locationView.text = currentEarthquake.getLocation()
 
+
+        // Create a new Date object from the time in milliseconds of the earthquake
+        val dateObject = Date(currentEarthquake.getTimeInMilliseconds())
+
         // Find the TextView with view ID date
         val dateView: TextView = listItemView.findViewById<View>(R.id.date) as TextView
+        // Format the date string (i.e. "Mar 3, 1984")
+        val formattedDate = formatDate(dateObject)
         // Display the date of the current earthquake in that TextView
-        dateView.text = currentEarthquake.getDate()
+        dateView.setText(formattedDate)
+
+        // Find the TextView with view ID time
+        val timeView = listItemView.findViewById(R.id.time) as TextView
+        // Format the time string (i.e. "4:30PM")
+        val formattedTime = formatTime(dateObject)
+        // Display the time of the current earthquake in that TextView
+        timeView.setText(formattedTime)
 
         // Return the list item view that is now showing the appropriate data
         return listItemView
     }
+}
+
+/**
+ * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+ */
+private fun formatDate(dateObject: Date): String {
+    val dateFormat = SimpleDateFormat("LLL dd, yyyy", Locale.US)
+    return dateFormat.format(dateObject)
+}
+
+/**
+ * Return the formatted date string (i.e. "4:30 PM") from a Date object.
+ */
+private fun formatTime(dateObject: Date): String {
+    val timeFormat = SimpleDateFormat("h:mm a", Locale.US)
+    return timeFormat.format(dateObject)
 }

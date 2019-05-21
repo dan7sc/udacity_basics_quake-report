@@ -77,7 +77,7 @@ object QueryUtils {
                 val location: String = properties.getString("place")
 
                 // Extract the value for the key called "time"
-                val time: String = properties.getString("time")
+                val time: Long = properties.getLong("time")
 
                 // Create a new {@link Earthquake} object with the magnitude, location, and time
                 // from the JSON response.
@@ -99,8 +99,8 @@ object QueryUtils {
     }
 
 }
-/**
- * Create a private constructor because no one should ever create a [QueryUtils] object.
- * This class is only meant to hold static variables and methods, which can be accessed
- * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
- */
+///**
+// * Create a private constructor because no one should ever create a [QueryUtils] object.
+// * This class is only meant to hold static variables and methods, which can be accessed
+// * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
+// */

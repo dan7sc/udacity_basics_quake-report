@@ -26,8 +26,9 @@ class Earthquake
  * @param location is the city location of the earthquake
  * @param timeInMilliseconds is the time in milliseconds (from the Epoch) when the
  *  earthquake happened
+ * @param url is the website URL to find more details about the earthquake
  */
-(magnitude: Double, location: String, timeInMilliseconds: Long) {
+(magnitude: Double, location: String, timeInMilliseconds: Long, url: String) {
 
     /** Magnitude of the earthquake  */
     private var mMagnitude: Double = magnitude
@@ -37,6 +38,9 @@ class Earthquake
 
     /** Date of the earthquake  */
     private var mTimeInMilliseconds: Long = timeInMilliseconds
+
+    /** Website URL of the earthquake  */
+    private val mUrl: String? = url
 
     /**
      * Returns the magnitude of the earthquake.
@@ -57,5 +61,12 @@ class Earthquake
      */
     fun getTimeInMilliseconds(): Long {
         return mTimeInMilliseconds
+    }
+
+    /**
+     * Returns the website URL to find more information about the earthquake.
+     */
+    fun getUrl(): String? {
+        return mUrl
     }
 }

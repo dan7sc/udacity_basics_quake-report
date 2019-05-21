@@ -92,9 +92,12 @@ object QueryUtils {
                 // Extract the value for the key called "time"
                 val time: Long = properties.getLong("time")
 
-                // Create a new {@link Earthquake} object with the magnitude, location, and time
-                // from the JSON response.
-                val earthquake = Earthquake(magnitude, location, time)
+                // Extract the value for the key called "url"
+                val url: String = properties.getString("url")
+
+                // Create a new {@link Earthquake} object with the magnitude, location, time,
+                // and url from the JSON response.
+                val earthquake = Earthquake(magnitude, location, time, url)
 
                 // Add the new {@link Earthquake} to the list of earthquakes.
                 earthquakes.add(earthquake)

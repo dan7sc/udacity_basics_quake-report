@@ -27,10 +27,10 @@ class Earthquake
  * @param timeInMilliseconds is the time in milliseconds (from the Epoch) when the
  *  earthquake happened
  */
-(magnitude: String, location: String, timeInMilliseconds: Long) {
+(magnitude: Double, location: String, timeInMilliseconds: Long) {
 
     /** Magnitude of the earthquake  */
-    private var mMagnitude: String = magnitude
+    private var mMagnitude: Double = magnitude
 
     /** Location of the earthquake  */
     private var mLocation: String = location
@@ -41,7 +41,7 @@ class Earthquake
     /**
      * Returns the magnitude of the earthquake.
      */
-    fun getMagnitude(): String? {
+    fun getMagnitude(): Double {
         return mMagnitude
     }
 

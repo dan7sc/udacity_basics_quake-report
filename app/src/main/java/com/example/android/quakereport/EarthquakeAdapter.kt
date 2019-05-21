@@ -26,7 +26,7 @@ import android.widget.TextView
 import java.util.Date
 import java.util.Locale
 import java.text.SimpleDateFormat
-
+import java.text.DecimalFormat
 
 
 /**
@@ -67,10 +67,17 @@ class EarthquakeAdapter
         // Find the earthquake at the given position in the list of earthquakes
         val currentEarthquake = getItem(position)
 
+//        // Find the TextView with view ID magnitude
+//        val magnitudeView: TextView = listItemView!!.findViewById<View>(R.id.magnitude) as TextView
+//        // Display the magnitude of the current earthquake in that TextView
+//        magnitudeView.text = currentEarthquake!!.getMagnitude().toString()
+
         // Find the TextView with view ID magnitude
         val magnitudeView: TextView = listItemView!!.findViewById<View>(R.id.magnitude) as TextView
+        // Format the magnitude to show 1 decimal place
+        val formattedMagnitude: String = formatMagnitude(currentEarthquake!!.getMagnitude())
         // Display the magnitude of the current earthquake in that TextView
-        magnitudeView.text = currentEarthquake!!.getMagnitude()
+        magnitudeView.text = formattedMagnitude
 
         // Get the original location string from the Earthquake object,
         // which can be in the format of "5km N of Cairo, Egypt" or "Pacific-Antarctic Ridge".
@@ -146,6 +153,15 @@ class EarthquakeAdapter
     private fun formatTime(dateObject: Date): String {
         val timeFormat = SimpleDateFormat("h:mm a", Locale.US)
         return timeFormat.format(dateObject)
+    }
+
+    /**
+     * Return the formatted magnitude string showing 1 decimal place (i.e. "3.2")
+     * from a decimal magnitude value.
+     */
+    private fun formatMagnitude(magnitude: Double): String {
+        val magnitudeFormat = DecimalFormat("0.0")
+        return magnitudeFormat.format(magnitude)
     }
 }
 

@@ -119,14 +119,14 @@ class EarthquakeAdapter
         // Format the date string (i.e. "Mar 3, 1984")
         val formattedDate = formatDate(dateObject)
         // Display the date of the current earthquake in that TextView
-        dateView.setText(formattedDate)
+        dateView.text = formattedDate
 
         // Find the TextView with view ID time
         val timeView = listItemView.findViewById(R.id.time) as TextView
         // Format the time string (i.e. "4:30PM")
         val formattedTime = formatTime(dateObject)
         // Display the time of the current earthquake in that TextView
-        timeView.setText(formattedTime)
+        timeView.text = formattedTime
 
         // Return the list item view that is now showing the appropriate data
         return listItemView

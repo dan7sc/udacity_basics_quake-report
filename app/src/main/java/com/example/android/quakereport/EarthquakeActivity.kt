@@ -29,6 +29,9 @@ import android.widget.AdapterView
 import android.widget.ListView
 
 import java.util.ArrayList
+import android.widget.TextView
+
+
 
 
 
@@ -36,6 +39,9 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
 
     /** Adapter for the list of earthquakes  */
     private var mAdapter: EarthquakeAdapter? = null
+
+    /** TextView that is displayed when the list is empty  */
+    private var mEmptyStateTextView: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(LOG_TAG, "TEST: Earthquake Activity onCreate() called")
@@ -45,6 +51,9 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
 
         // Find a reference to the {@link ListView} in the layout
         val earthquakeListView: ListView = findViewById<View>(R.id.list) as ListView
+
+        mEmptyStateTextView = findViewById<View>(R.id.empty_view) as TextView
+        earthquakeListView.emptyView = mEmptyStateTextView
 
         // Create a new adapter that takes an empty list of earthquakes as input
         mAdapter = EarthquakeAdapter(this, ArrayList())
@@ -88,6 +97,9 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
 
     override fun onLoadFinished(loader: Loader<List<Earthquake>>, earthquakes: List<Earthquake>?) {
         Log.i(LOG_TAG, "TEST: onLoadFinished() called ...")
+
+        // Set empty state text to display "No earthquakes found."
+        mEmptyStateTextView!!.setText(R.string.no_earthquakes)
 
         // Clear the adapter of previous earthquake data
         mAdapter!!.clear()

@@ -174,19 +174,18 @@ class EarthquakeAdapter
     private fun getMagnitudeColor(magnitude: Double): Int {
         val magnitudeColorResourceId: Int
         val magnitudeFloor: Int = Math.floor(magnitude).toInt()
-        when (magnitudeFloor) {
-            0, 1 -> magnitudeColorResourceId = R.color.magnitude1
-            2 -> magnitudeColorResourceId = R.color.magnitude2
-            3 -> magnitudeColorResourceId = R.color.magnitude3
-            4 -> magnitudeColorResourceId = R.color.magnitude4
-            5 -> magnitudeColorResourceId = R.color.magnitude5
-            6 -> magnitudeColorResourceId = R.color.magnitude6
-            7 -> magnitudeColorResourceId = R.color.magnitude7
-            8 -> magnitudeColorResourceId = R.color.magnitude8
-            9 -> magnitudeColorResourceId = R.color.magnitude9
-            else -> magnitudeColorResourceId = R.color.magnitude10plus
+        magnitudeColorResourceId = when (magnitudeFloor) {
+            0, 1 -> R.color.magnitude1
+            2 -> R.color.magnitude2
+            3 -> R.color.magnitude3
+            4 -> R.color.magnitude4
+            5 -> R.color.magnitude5
+            6 -> R.color.magnitude6
+            7 -> R.color.magnitude7
+            8 -> R.color.magnitude8
+            9 -> R.color.magnitude9
+            else -> R.color.magnitude10plus
         }
         return ContextCompat.getColor(context, magnitudeColorResourceId)
     }
 }
-

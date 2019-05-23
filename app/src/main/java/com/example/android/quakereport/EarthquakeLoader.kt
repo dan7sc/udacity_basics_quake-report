@@ -5,6 +5,7 @@ package com.example.android.quakereport
 
 import android.content.AsyncTaskLoader
 import android.content.Context
+import android.util.Log
 
 /**
  * Loads a list of earthquakes by using an AsyncTask to perform the
@@ -22,6 +23,7 @@ class EarthquakeLoader
      private val mUrl: String? = url
 
     override fun onStartLoading() {
+        Log.i(LOG_TAG, "TEST: onStartLoading() called ...")
         forceLoad()
     }
 
@@ -29,6 +31,8 @@ class EarthquakeLoader
      * This is on a background thread.
      */
     override fun loadInBackground(): List<Earthquake>? {
+        Log.i(LOG_TAG, "TEST: loadInBackground() called ...")
+
         return if (mUrl == null) {
             null
         } else QueryUtils.fetchEarthquakeData(mUrl)

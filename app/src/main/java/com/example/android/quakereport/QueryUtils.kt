@@ -45,6 +45,8 @@ object QueryUtils {
      * Query the USGS dataset and return a list of [Earthquake] objects.
      */
     fun fetchEarthquakeData(requestUrl: String): List<Earthquake>? {
+        Log.i(LOG_TAG, "TEST: fetchEarthquakeData() called ...")
+
         // Create URL object
         val url: URL? = createUrl(requestUrl)
 

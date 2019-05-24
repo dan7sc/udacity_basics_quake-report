@@ -35,6 +35,8 @@ import android.net.NetworkInfo
 import android.net.ConnectivityManager
 import android.view.Menu
 import android.view.MenuItem
+import android.preference.PreferenceManager
+import android.content.SharedPreferences
 
 
 
@@ -110,7 +112,20 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
     override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<List<Earthquake>> {
         // Create a new loader for the given URL
         Log.i(LOG_TAG, "TEST: onCreateLoader() called ...")
-        return EarthquakeLoader(this, USGS_REQUEST_URL)
+
+        val sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val minMagnitude: String? = sharedPrefs.getString(
+                getString(R.string.settings_min_magnitude_key),
+                getString(R.string.settings_min_magnitude_default))
+        val baseUri: Uri = Uri.parse(USGS_REQUEST_URL)
+        val uriBuilder: Uri.Builder = baseUri.buildUpon()
+
+        uriBuilder.appendQueryParameter("format", "geojson")
+        uriBuilder.appendQueryParameter("limit", "10")
+        uriBuilder.appendQueryParameter("minmag", minMagnitude)
+        uriBuilder.appendQueryParameter("orderby", "time")
+
+        return EarthquakeLoader(this, uriBuilder.toString())
     }
 
     override fun onLoadFinished(loader: Loader<List<Earthquake>>, earthquakes: List<Earthquake>?) {
@@ -160,7 +175,7 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
         private val LOG_TAG = EarthquakeActivity::class.java.name
 
         /** URL for earthquake data from the USGS dataset  */
-        private const val USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10"
+        private const val USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query"
 
         /**
          * Constant value for the earthquake loader ID. We can choose any integer.

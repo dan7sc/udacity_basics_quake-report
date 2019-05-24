@@ -47,6 +47,13 @@ object QueryUtils {
     fun fetchEarthquakeData(requestUrl: String): List<Earthquake>? {
         Log.i(LOG_TAG, "TEST: fetchEarthquakeData() called ...")
 
+        // Force the background thread to sleep for 2 seconds
+        try {
+            Thread.sleep(2000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
         // Create URL object
         val url: URL? = createUrl(requestUrl)
 

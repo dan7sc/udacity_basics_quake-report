@@ -33,8 +33,6 @@ import android.widget.TextView
 
 
 
-
-
 class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<List<Earthquake>> {
 
     /** Adapter for the list of earthquakes  */
@@ -97,6 +95,10 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
 
     override fun onLoadFinished(loader: Loader<List<Earthquake>>, earthquakes: List<Earthquake>?) {
         Log.i(LOG_TAG, "TEST: onLoadFinished() called ...")
+
+        // Hide loading indicator because the data has been loaded
+        val loadingIndicator: View = findViewById<View>(R.id.loading_indicator)
+        loadingIndicator.visibility = View.GONE
 
         // Set empty state text to display "No earthquakes found."
         mEmptyStateTextView!!.setText(R.string.no_earthquakes)

@@ -30,6 +30,9 @@ import android.widget.ListView
 
 import java.util.ArrayList
 import android.widget.TextView
+import android.content.Context
+import android.net.NetworkInfo
+import android.net.ConnectivityManager
 
 
 
@@ -76,14 +79,30 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
             startActivity(websiteIntent)
         }
 
-        // Get a reference to the LoaderManager, in order to interact with loaders.
-        val loaderManager: LoaderManager? = loaderManager
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        val connMgr: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-        // because this activity implements the LoaderCallbacks interface).
-        Log.i(LOG_TAG, "TEST: calling initLoader() ...")
-        loaderManager!!.initLoader(EARTHQUAKE_LOADER_ID, null, this)
+        // Get details on the currently active default data network
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected) {
+            // Get a reference to the LoaderManager, in order to interact with loaders.
+            val loaderManager: LoaderManager? = loaderManager
+
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            loaderManager!!.initLoader(EARTHQUAKE_LOADER_ID, null, this)
+        } else {
+            // Otherwise, display error
+            // First, hide loading indicator so error message will be visible
+            val loadingIndicator: View = findViewById<View>(R.id.loading_indicator)
+            loadingIndicator.visibility = View.GONE
+
+            // Update empty state with no connection error message
+            mEmptyStateTextView!!.setText(R.string.no_internet_connection)
+        }
     }
 
     override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<List<Earthquake>> {
@@ -91,7 +110,6 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
         Log.i(LOG_TAG, "TEST: onCreateLoader() called ...")
         return EarthquakeLoader(this, USGS_REQUEST_URL)
     }
-
 
     override fun onLoadFinished(loader: Loader<List<Earthquake>>, earthquakes: List<Earthquake>?) {
         Log.i(LOG_TAG, "TEST: onLoadFinished() called ...")

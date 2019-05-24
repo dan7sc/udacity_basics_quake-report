@@ -33,6 +33,8 @@ import android.widget.TextView
 import android.content.Context
 import android.net.NetworkInfo
 import android.net.ConnectivityManager
+import android.view.Menu
+import android.view.MenuItem
 
 
 
@@ -136,6 +138,21 @@ class EarthquakeActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Li
 
         // Loader reset, so we can clear out our existing data.
         mAdapter!!.clear()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        if (id == R.id.action_settings) {
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsIntent)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
